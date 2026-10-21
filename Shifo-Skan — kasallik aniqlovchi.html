@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kasallik aniqlovchi</title>
+<style>
+:root{--bg:#efe7d9;--card:#fffdf8;--text:#1b2a29;--muted:#6a7773;--ink:#0d3a39;--ink2:#14524f;--a1:#1f9d8a;--a2:#ff6a3d;--soft:#f6f1e6;--border:#e7dfcf;--good:#2f9e63;--warn:#e29a0b;--bad:#df4a38;--paper:#fffefa;--shadow:0 30px 80px rgba(20,50,45,.22);--serif:Georgia,"Iowan Old Style","Palatino Linotype",serif;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a1211;--card:#121f1e;--text:#e8f0ee;--muted:#8fa5a1;--soft:#192a28;--border:#243f3c;--paper:#0f1a19;--shadow:0 30px 80px rgba(0,0,0,.6);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0a1211;--card:#121f1e;--text:#e8f0ee;--muted:#8fa5a1;--soft:#192a28;--border:#243f3c;--paper:#0f1a19;--shadow:0 30px 80px rgba(0,0,0,.6);color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--bg);background-image:radial-gradient(rgba(13,58,57,.09) 1.2px,transparent 1.2px);background-size:22px 22px;color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;display:flex;justify-content:center;align-items:flex-start;padding:24px 14px}
+.app{width:100%;max-width:1020px;display:grid;grid-template-columns:290px 1fr;border-radius:30px;overflow:hidden;box-shadow:var(--shadow);background:var(--card);min-height:660px}
+.side{background:linear-gradient(160deg,var(--ink),var(--ink2));color:#fff;padding:30px 26px;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:30px}
+.side:before{content:"";position:absolute;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(255,106,61,.5),transparent 70%);bottom:-90px;left:-80px}
+.side>*{position:relative}
+.brand{display:flex;gap:12px;align-items:center}
+.lg{width:48px;height:48px;border-radius:15px;background:var(--a2);display:grid;place-items:center;font-size:1.5rem;transform:rotate(-8deg);box-shadow:0 8px 20px rgba(255,106,61,.45)}
+.brand b{font-family:var(--serif);font-size:1.3rem;display:block;line-height:1.1}.brand small{opacity:.65;font-size:.76rem}
+.stepper{list-style:none;margin:0;padding:0;display:grid;gap:18px}
+.stepper li{display:flex;gap:12px;align-items:center;opacity:.5;font-size:.92rem;transition:.3s}
+.stepper li i{width:32px;height:32px;border-radius:50%;border:2px solid rgba(255,255,255,.4);display:grid;place-items:center;font-style:normal;font-size:.82rem;font-weight:700;flex:none;transition:.3s}
+.stepper li.cur{opacity:1;font-weight:650}.stepper li.cur i{background:var(--a2);border-color:var(--a2)}
+.stepper li.done{opacity:.9}.stepper li.done i{background:var(--a1);border-color:var(--a1)}
+.live{margin-top:auto}.live h5{margin:0 0 10px;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;opacity:.6}
+.live div{display:flex;align-items:center;gap:9px;font-size:.84rem;margin-bottom:7px}.live em{opacity:.55;font-style:normal;font-size:.82rem}
+.dot{width:10px;height:10px;border-radius:50%;flex:none}
+.main{padding:36px 40px;animation:in .45s ease;min-width:0}
+@keyframes in{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+.seg{display:flex;gap:5px;margin-bottom:26px}.seg i{flex:1;height:5px;border-radius:9px;background:var(--border);transition:.3s}.seg i.done{background:var(--a1)}.seg i.cur{background:var(--a2)}
+.qh{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.bign{font-family:var(--serif);font-size:3.6rem;line-height:1;color:var(--a2);font-weight:700}.bign small{font-size:1.1rem;color:var(--muted);font-weight:400}
+.ico{width:84px;height:84px;border-radius:26px;background:var(--soft);display:grid;place-items:center;font-size:2.6rem;transform:rotate(-6deg);border:2px solid var(--border);animation:pop .45s ease}
+@keyframes pop{from{transform:scale(.4) rotate(-30deg);opacity:0}to{transform:rotate(-6deg);opacity:1}}
+.qt{font-family:var(--serif);font-size:1.75rem;line-height:1.25;margin:0 0 8px}.qs{color:var(--muted);margin:0 0 26px;font-size:.92rem}
+.sev{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.sev button{display:flex;flex-direction:column;align-items:center;gap:6px;padding:20px 8px;border-radius:20px;border:2px solid var(--border);background:var(--card);color:var(--text);cursor:pointer;font-family:inherit;transition:.2s}
+.sev button b{font-size:2rem;font-weight:400;transition:.2s}.sev button span{font-weight:700;font-size:1rem}.sev button small{color:var(--muted);font-size:.75rem}
+.sev button:hover{transform:translateY(-4px)}.sev button:hover b{transform:scale(1.2)}
+.sev .ok:hover,.sev .ok.sel{border-color:var(--good);background:rgba(47,158,99,.1)}
+.sev .mid:hover,.sev .mid.sel{border-color:var(--warn);background:rgba(226,154,11,.12)}
+.sev .hi:hover,.sev .hi.sel{border-color:var(--bad);background:rgba(223,74,56,.1)}
+.nav{display:flex;justify-content:space-between;margin-top:24px}
+.lnk{background:none;border:none;color:var(--muted);font-size:.9rem;cursor:pointer;padding:6px;font-family:inherit}.lnk:hover{color:var(--a2)}
+.kb{color:var(--muted);font-size:.75rem;text-align:center;margin:8px 0 0}
+.eyebrow{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--a2);font-weight:700;margin-bottom:8px}
+.h1{font-family:var(--serif);font-size:2.2rem;line-height:1.15;margin:0 0 12px}.lead{color:var(--muted);line-height:1.6;margin:0 0 22px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}.chips span{background:var(--soft);border:1px solid var(--border);padding:8px 14px;border-radius:99px;font-size:.84rem}
+.btn{width:100%;padding:16px;border:none;border-radius:16px;background:var(--ink);color:#fff;font-size:1.02rem;font-weight:700;cursor:pointer;margin-top:8px;transition:.2s;font-family:inherit;box-shadow:0 10px 24px rgba(13,58,57,.3)}
+.btn:hover{background:var(--a2);transform:translateY(-2px);box-shadow:0 12px 26px rgba(255,106,61,.4)}
+.btn.sec2{background:transparent;color:var(--text);box-shadow:none;border:2px solid var(--border)}.btn.sec2:hover{background:var(--soft);border-color:var(--a1);color:var(--text);box-shadow:none}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fld{margin-bottom:12px}.fld label{display:block;font-size:.74rem;font-weight:700;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em}
+.fld input,.fld select{width:100%;padding:13px 14px;border-radius:14px;border:2px solid var(--border);background:var(--paper);color:var(--text);font-size:1rem;font-family:inherit}
+.fld input:focus,.fld select:focus{outline:none;border-color:var(--a1)}
+.chk{display:flex;align-items:flex-start;gap:10px;font-size:.88rem;margin:6px 0 12px;cursor:pointer;line-height:1.45}.chk input{width:18px;height:18px;margin-top:2px;accent-color:var(--a2)}
+.err{color:var(--bad);font-size:.82rem;min-height:1.1em;margin:2px 0 6px}
+.banner{background:linear-gradient(135deg,var(--ink),var(--ink2));color:#fff;border-radius:24px;padding:26px;display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:22px;position:relative;overflow:hidden}
+.banner:after{content:"";position:absolute;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(255,106,61,.45),transparent 70%);right:-60px;bottom:-90px}
+.banner>*{position:relative;z-index:1}.banner .eyebrow{color:#ffb59e}
+.bt{font-family:var(--serif);font-size:1.7rem;line-height:1.15;margin:0 0 12px}
+.tag{display:inline-block;padding:5px 12px;border-radius:99px;font-size:.74rem;font-weight:700;color:#fff}
+.gauge{position:relative;width:150px;flex:none}.gauge svg{display:block;width:100%}.gauge b{position:absolute;left:0;right:0;bottom:0;text-align:center;font-family:var(--serif);font-size:1.8rem}
+.tabs{display:flex;gap:26px;border-bottom:2px solid var(--border);margin-bottom:22px}
+.tabs button{border:none;background:none;padding:10px 2px 12px;font-size:.95rem;font-weight:700;color:var(--muted);cursor:pointer;position:relative;font-family:inherit}
+.tabs button.on{color:var(--text)}.tabs button.on:after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:3px;border-radius:3px;background:var(--a2)}
+.box{background:var(--soft);border-left:4px solid var(--a1);border-radius:6px 16px 16px 6px;padding:14px 16px;margin-bottom:12px;font-size:.9rem;line-height:1.6}
+.box h4{margin:0 0 6px;font-size:.93rem}.box ul{margin:0;padding-left:18px}
+.alert{background:rgba(223,74,56,.1);border-left-color:var(--bad);color:var(--bad)}.alert h4{color:var(--bad)}
+.sec{font-size:.74rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:24px 0 12px;font-weight:700;display:flex;align-items:center;gap:10px}
+.sec:after{content:"";flex:1;height:1px;background:var(--border)}
+.bar{margin-bottom:12px}.bar .r{display:flex;justify-content:space-between;font-size:.9rem;font-weight:600;margin-bottom:5px}
+.bar .t{height:12px;background:var(--border);border-radius:9px;overflow:hidden}
+.bar .t i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,var(--a1),var(--a2));width:0;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.sym{display:flex;flex-wrap:wrap;gap:7px}.sym span{background:var(--soft);border:1px solid var(--border);padding:6px 12px;border-radius:10px;font-size:.8rem}
+.sym span.s2{background:rgba(223,74,56,.1);border-color:rgba(223,74,56,.4);color:var(--bad);font-weight:650}
+.letter{background:var(--paper);border:1px solid var(--border);border-radius:8px 8px 18px 18px;padding:0 22px 22px;box-shadow:0 10px 30px rgba(0,0,0,.06);position:relative}
+.lh{display:flex;justify-content:space-between;align-items:center;margin:0 -22px 18px;padding:14px 22px;background:var(--ink);color:#fff;border-radius:8px 8px 0 0;font-size:.8rem}
+.lh b{font-family:var(--serif);font-size:1.05rem}.lh span{opacity:.75}
+.pt{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
+.pt div{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:.86rem}.pt small{display:block;color:var(--muted);font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+table{width:100%;border-collapse:collapse;font-size:.86rem}
+td,th{padding:9px 6px;border-bottom:1px dashed var(--border);text-align:left}th{color:var(--muted);font-size:.7rem;text-transform:uppercase;letter-spacing:.06em}
+.btns{display:flex;gap:10px;flex-wrap:wrap}.btns .btn{flex:1;min-width:140px}
+.disc{font-size:.77rem;color:var(--muted);line-height:1.55;margin-top:18px;text-align:center}
+.toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:#111;color:#fff;padding:10px 18px;border-radius:99px;font-size:.88rem;z-index:9}
+.contact{background:var(--soft);border:1px solid var(--border);border-radius:20px;padding:16px;margin-bottom:12px}
+.ch{display:flex;gap:12px;align-items:center;margin-bottom:12px}.av{width:46px;height:46px;border-radius:14px;background:var(--ink);display:grid;place-items:center;font-size:1.4rem;flex:none}
+.ch b{display:block}.ch small{color:var(--muted)}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.abtn{flex:1;min-width:110px;text-align:center;text-decoration:none;padding:12px 10px;border-radius:12px;background:var(--card);border:2px solid var(--border);color:var(--text);font-weight:650;font-size:.88rem;transition:.2s}
+.abtn:hover{border-color:var(--a1);transform:translateY(-2px)}
+.abtn.sos{display:block;margin-top:10px;background:var(--bad);border-color:var(--bad);color:#fff}
+.inl{display:flex;gap:8px}.inl input{flex:1;padding:12px;border-radius:12px;border:2px solid var(--border);background:var(--paper);color:var(--text);font-size:.95rem;min-width:0;font-family:inherit}.inl button{padding:0 18px;border:none;border-radius:12px;background:var(--ink);color:#fff;font-weight:700;cursor:pointer;font-family:inherit}
+.mine{margin-top:12px;font-size:.85rem;color:var(--muted)}.mine b{color:var(--text)}
+.sosf{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:20;background:var(--bad);color:#fff;text-decoration:none;font-weight:800;padding:13px 20px;border-radius:99px;box-shadow:0 10px 28px rgba(223,74,56,.5);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+@media (max-width:820px){
+.app{grid-template-columns:1fr;border-radius:24px}
+.side{padding:18px 20px;gap:14px}.live{display:none}.brand small{display:none}
+.stepper{grid-template-columns:repeat(3,1fr);gap:6px}.stepper li{flex-direction:column;text-align:center;gap:6px;font-size:.74rem}
+.main{padding:24px 20px}.h1{font-size:1.7rem}.qt{font-size:1.4rem}.bign{font-size:2.6rem}.ico{width:68px;height:68px;font-size:2.1rem}
+.banner{flex-direction:column;align-items:flex-start}.gauge{width:130px}.pt{grid-template-columns:1fr}.sev button{padding:16px 4px}}
+@media print{.sosf,.contact{display:none!important}body{background:#fff;padding:0}.side,.tabs,.btns,.nav,.toast,.banner,.pv,.disc{display:none!important}.app{display:block;box-shadow:none}.main{padding:0}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand"><div class="lg">🩺</div><div><b>Shifo-Skan</b><small>Alomatlar tahlili</small></div></div>
+    <ol class="stepper"><li><i>1</i>Ma'lumot</li><li><i>2</i>Alomatlar</li><li><i>3</i>Natija</li></ol>
+    <div class="live" id="live"></div>
+  </aside>
+  <main class="main" id="card"></main>
+</div>
+<a class="sosf" href="tel:103" target="_blank" rel="noopener">🚑 103</a>
+<script>
+const S=[
+["🤧","Burun oqishi yoki burun bitishi bormi?","Suyuq ajralma, burun bitishi"],
+["🌡️","Isitma bormi?","Biroz: 37.2–38°C · Kuchli: 38°C dan yuqori"],
+["🥶","Titroq (sovuq qotish) bormi?","Sovuq qotish, jag' titrashi"],
+["🤢","Ko'ngil aynishi bormi?","Ko'ngil behuzurligi, qusgisi kelishi"],
+["😷","Yo'tal bormi?","Quruq yoki balg'amli yo'tal"],
+["😖","Tomoqda og'riq bormi?","Yutinganda og'riq, qichishish"],
+["🤮","Qusish yoki ich ketishi bormi?","Suyuq ich, qusish"],
+["💪","Mushak va bo'g'imlarda og'riq, holsizlik bormi?","Badan majaqlanishi, kuchsizlik"],
+["👁️","Aksirish va ko'zlarda qichishish yoki yoshlanish bormi?","Ketma-ket aksirish, ko'z qizarishi"],
+["🤕","Bosh og'rig'i bormi?","Peshona, chakka yoki yuz sohasida"]
+];
+const NAMES=["Burun oqishi","Isitma","Titroq","Ko'ngil aynishi","Yo'tal","Tomoq og'rig'i","Qusish/ich ketishi","Mushak og'rig'i","Aksirish/ko'z qichishi","Bosh og'rig'i"];
+const D=[
+{n:"Shamollash (ORVI)",icd:"J06.9",p:[.9,.4,.3,0,.7,.7,0,.4,.4,.3],
+ d:"Yengil virusli infeksiya: burun oqishi va yo'tal bilan boshlanadi.",
+ tips:["Ko'proq iliq suyuqlik iching (choy, suv, kompot)","Dam oling, uxlashga vaqt ajrating","Xonani shamollating, havoni namlang","Isitma 38.5°C dan oshsa, shifokor maslahati bilan isitma tushiruvchi ichish mumkin"],
+ doc:"Alomatlar 7–10 kundan ortiq davom etsa yoki holat yomonlashsa.",
+ dr:{exam:["Tomoq, burun shilliq qavati, quloq pardasi ko'rigi","O'pka auskultatsiyasi (xirillash, nafas tezligi)","Limfa tugunlarini paypaslash"],tests:["Odatda laborator tekshiruv talab qilinmaydi","Isitma uzoq cho'zilsa: umumiy qon tahlili, CRP"],mg:["Simptomatik davo, suyuqlik rejimi","Antibiotik ko'rsatma bo'lmasa tavsiya etilmaydi (virusli)","Asoratlar (otit, sinusit, pnevmoniya) belgilarini kuzatish"]}},
+{n:"Gripp",icd:"J11.1",p:[.4,1,.9,.3,.7,.4,.1,1,0,.8],
+ d:"To'satdan boshlanadi: yuqori isitma, titroq va kuchli holsizlik.",
+ tips:["Yotoq rejimiga rioya qiling","Ko'p suyuqlik iching","Boshqalarga yuqtirmaslik uchun niqob taqing, uyda qoling","Ovqatni yengil qiling"],
+ doc:"Ayniqsa 65+ yoshda, homiladorlikda, surunkali kasalliklarda tezroq murojaat qiling. Antiviral dori dastlabki 48 soatda samaraliroq.",
+ dr:{exam:["Harorat, puls, SpO₂, nafas tezligi","O'pka auskultatsiyasi (pnevmoniya istisnosi)","Suvsizlanish belgilari"],tests:["Gripp/COVID-19 tezkor testi yoki PCR","Umumiy qon tahlili, CRP","Pnevmoniya shubhasida: ko'krak qafasi rentgeni"],mg:["Xavf guruhida yoki og'ir kechishida antiviral terapiyani ko'rib chiqish (dastlabki 48 soat)","Simptomatik davo, suyuqlik","Bakterial asorat belgilari bo'lsa antibiotik masalasi"]}},
+{n:"Angina (tomoq yallig'lanishi)",icd:"J03.9",p:[0,.9,.6,.1,.1,1,0,.4,0,.4],
+ d:"Kuchli tomoq og'rig'i va isitma, yo'tal kam yoki yo'q.",
+ tips:["Iliq suyuqlik iching, issiq va achchiq ovqatdan saqlaning","Tomoqni iliq tuzli suv bilan chayqang","Ovozni zo'riqtirmang"],
+ doc:"Bakterial angina antibiotik talab qilishi mumkin — shifokor ko'rigi shart. Tashxissiz antibiotik ichmang.",
+ dr:{exam:["Bodomsimon bezlarda yiringli karash, giperemiya","Bo'yin limfa tugunlari kattalashuvi","Peritonzillyar abssess belgilari (trizm, bir tomonlama shish)"],tests:["A guruhi streptokokk tezkor testi yoki tomoq surtmasi","Umumiy qon tahlili, CRP"],mg:["Streptokokk tasdiqlansa antibiotik terapiyasi (klinik ko'rsatmalarga muvofiq)","Og'riq va isitmaga simptomatik davo","Revmatik asoratlar xavfini hisobga olish"]}},
+{n:"Oshqozon-ichak infeksiyasi",icd:"A09",p:[0,.6,.5,1,0,0,1,.5,0,.4],
+ d:"Ko'ngil aynishi, qusish va ich ketishi bilan kechadi.",
+ tips:["Oz-ozdan, tez-tez suyuqlik iching (regidron eritmasi)","Dastlabki soatlarda og'ir ovqat yemang","Qo'l gigiyenasiga rioya qiling"],
+ doc:"Suvsizlanish belgilari (og'iz qurishi, siydik kamayishi, bosh aylanishi), qonli ich yoki 2 kundan ortiq davom etsa.",
+ dr:{exam:["Suvsizlanish darajasi (teri turgori, shilliq qavat, puls, AQB)","Qorin paypaslash (peritoneal belgilar istisnosi)","Epidemiologik anamnez: ovqat, suv, aloqador shaxslar"],tests:["Najas tahlili va ekish (qonli/uzoq davom etgan ichketishda)","Elektrolitlar, kreatinin (o'rta va og'ir suvsizlanishda)","Umumiy qon tahlili"],mg:["Birinchi navbatda regidratatsiya (og'iz orqali yoki venadan)","Antibiotik faqat ko'rsatma bo'lganda","Kasalxonaga yotqizish mezonlarini baholash"]}},
+{n:"Allergiya (allergik rinit)",icd:"J30.4",p:[.9,0,0,0,.3,.3,0,0,1,.3],
+ d:"Isitmasiz kechadi: aksirish, ko'z qichishi va burun oqishi.",
+ tips:["Allergenni (chang, gul changi, hayvon juni) aniqlashga harakat qiling","Burunni sho'r suv bilan yuving","Xonani nam latta bilan tez-tez artib turing"],
+ doc:"Alomatlar takrorlansa, allergolog ko'rigidan o'ting. Nafas qisilsa yoki yuz-lab shishsa — zudlik bilan 103.",
+ dr:{exam:["Burun shilliq qavati (rangsiz-oqish, shishgan), konyunktiva","Mavsumiylik va allergenlar bilan aloqani aniqlash","Bronxial astma belgilari (xirillash)"],tests:["Teri prik-testi yoki o'ziga xos IgE","Qonda eozinofillar"],mg:["Allergenni bartaraf etish choralari","Antigistamin, intranazal glyukokortikosteroidlarni ko'rib chiqish","Astma bilan birga kelsa allergolog/pulmonolog"]}},
+{n:"Bronxit",icd:"J20.9",p:[.3,.4,.3,0,1,.3,0,.4,0,.3],
+ d:"Asosiy belgi — davomli yo'tal, ko'pincha balg'am bilan.",
+ tips:["Ko'p iliq suyuqlik iching","Chekishdan va chang havodan saqlaning","Xonada havo namligini oshiring"],
+ doc:"Yo'tal 2–3 haftadan ortiq cho'zilsa, nafas qisilsa yoki balg'amda qon bo'lsa.",
+ dr:{exam:["O'pka auskultatsiyasi (quruq/nam xirillash)","Nafas tezligi, SpO₂","Chekish va kasbiy omillar"],tests:["Pnevmoniya shubhasida: ko'krak qafasi rentgeni","Umumiy qon tahlili, CRP","Uzoq cho'zilgan yo'talda: spirometriya"],mg:["Ko'pincha virusli — simptomatik davo","Antibiotik odatda talab qilinmaydi (bakterial belgilarsiz)","3 haftadan uzoq yo'talda boshqa sabablarni izlash (astma, reflyuks, TB)"]}},
+{n:"Sinusit",icd:"J01.9",p:[1,.5,.3,.1,.3,.2,0,.2,.1,1],
+ d:"Burun bitishi bilan birga yuz va peshonada og'irlik, bosh og'rig'i.",
+ tips:["Burunni sho'r suv bilan tez-tez yuving","Bug' ingalyatsiyasi yengillashtiradi","Ko'p suyuqlik iching"],
+ doc:"Alomatlar 10 kundan ortiq davom etsa, isitma bilan yomonlashsa yoki ko'z atrofi shishsa LOR-shifokorga boring.",
+ dr:{exam:["Yuz sinuslari perkussiyasi/paypaslash og'rig'i","Rinoskopiya: yiringli ajralma, shish","Orbital asoratlar belgilari (ko'z atrofi shishi)"],tests:["Odatda klinik tashxis","Murakkab/surunkali holatda: burun yondosh bo'shliqlari KT"],mg:["Burunni sho'r suv bilan yuvish, dekongestant (qisqa muddat)","Antibiotik: simptomlar >10 kun yoki og'irlashib borayotganda","Asoratlarda LOR-shifokorga yo'llash"]}}
+];
+/* ✏️ Shifokor ma'lumotini shu yerda o'zgartiring */
+const DOCTOR={n:"Shifokor (terapevt)",p:"+998900000000"};
+const OPTS=[["Yo'q",0,"ok","😊","Alomat yo'q"],["Biroz",.5,"mid","😐","Yengil"],["Kuchli",1,"hi","😣","Sezilarli"]];
+const LV=["yo'q","biroz","kuchli"];
+const COL={0:"var(--good)",.5:"var(--warn)",1:"var(--bad)"};
+let i=-1,a=Array(S.length).fill(null),P={},R=null,tab="p";
+const card=document.getElementById("card");
+const $=h=>{card.style.animation="none";card.offsetHeight;card.style.animation="";card.innerHTML=h};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function setStep(n){document.querySelectorAll(".stepper li").forEach((e,k)=>{e.className=k<n?"done":k===n?"cur":""});}
+function updateLive(){
+  const on=a.map((v,k)=>v>0?'<div><span class="dot" style="background:'+COL[v]+'"></span>'+NAMES[k]+'</div>':"").join("");
+  document.getElementById("live").innerHTML='<h5>Tanlangan alomatlar</h5>'+(on||'<em>Hali tanlanmagan</em>');
+}
+function start(){
+  i=-2;a=Array(S.length).fill(null);P={};R=null;tab="p";setStep(0);updateLive();
+  $('<div class="eyebrow">Tezkor tahlil</div><h1 class="h1">Sog\'lig\'ingizni 1 daqiqada tekshiring</h1><p class="lead">Avval qisqa ma\'lumot, so\'ng 10 ta savol. Natijada sizga tavsiyalar, shifokor uchun esa tayyor klinik xulosa beriladi.</p><div class="chips"><span>⏱️ ~1 daqiqa</span><span>🔒 Ma\'lumot qurilmada qoladi</span><span>📄 Shifokor uchun hisobot</span></div><button class="btn" onclick="intake()">Boshlash →</button>');
+}
+function intake(){
+  setStep(0);
+  $('<div class="eyebrow">1-qadam</div><h2 class="h1" style="font-size:1.7rem">Bemor haqida</h2><p class="lead" style="margin-bottom:18px">Bu ma\'lumotlar shifokor uchun xulosada ko\'rsatiladi.</p>'+
+  '<div class="fld"><label>Ism (ixtiyoriy)</label><input id="f_n" value="'+esc(P.n||"")+'" placeholder="Masalan: Aziz"></div>'+
+  '<div class="row2"><div class="fld"><label>Yosh *</label><input id="f_a" type="number" min="0" max="120" value="'+esc(P.a||"")+'"></div>'+
+  '<div class="fld"><label>Jins *</label><select id="f_g"><option value="">Tanlang</option><option'+(P.g=="Erkak"?" selected":"")+'>Erkak</option><option'+(P.g=="Ayol"?" selected":"")+'>Ayol</option></select></div></div>'+
+  '<div class="row2"><div class="fld"><label>Harorat, °C</label><input id="f_t" type="number" step="0.1" min="34" max="43" value="'+esc(P.t||"")+'" placeholder="36.6"></div>'+
+  '<div class="fld"><label>Necha kundan beri? *</label><input id="f_d" type="number" min="0" max="365" value="'+esc(P.d||"")+'"></div></div>'+
+  '<div class="fld"><label>Sizning telefon raqamingiz *</label><input id="f_p" type="tel" value="'+(P.ph?fmtPhone(P.ph):"")+'" inputmode="tel" placeholder="+998 90 123 45 67"></div>'+
+  '<div class="row2"><div class="fld"><label>Shifokor ismi (ixtiyoriy)</label><input id="f_dn" value="'+esc(P.dn!==undefined?P.dn:DOCTOR.n)+'" placeholder="Dr. Karimov"></div>'+
+  '<div class="fld"><label>Shifokor raqami (ixtiyoriy)</label><input id="f_dp" type="tel" value="'+(P.dp!==undefined?(P.dp?fmtPhone(P.dp):""):fmtPhone(DOCTOR.p))+'" inputmode="tel" placeholder="+998 71 123 45 67"></div></div>'+
+  '<label class="chk"><input type="checkbox" id="f_r"'+(P.r?" checked":"")+'><span>Surunkali kasallik bor (astma, diabet, yurak, immunitet pasayishi) yoki homiladorman</span></label>'+
+  '<div class="err" id="err"></div><button class="btn" onclick="saveP()">Davom etish →</button>');
+}
+function saveP(){
+  const g=id=>document.getElementById(id);
+  const age=parseInt(g("f_a").value),days=parseInt(g("f_d").value),t=parseFloat(g("f_t").value);
+  if(isNaN(age)||age<0||age>120)return g("err").textContent="Yoshni to'g'ri kiriting (0–120).";
+  if(!g("f_g").value)return g("err").textContent="Jinsni tanlang.";
+  if(isNaN(days)||days<0)return g("err").textContent="Kasallik necha kun davom etayotganini kiriting.";
+  if(g("f_t").value&&(t<34||t>43))return g("err").textContent="Harorat 34–43°C oralig'ida bo'lsin.";
+  const ph=normPhone(g("f_p").value);if(!ph)return g("err").textContent="Telefon raqamingizni to'liq kiriting (masalan: +998 90 123 45 67).";
+  let dp=null;if(g("f_dp").value.replace(/\D/g,"").length>3){dp=normPhone(g("f_dp").value);if(!dp)return g("err").textContent="Shifokor raqami noto'g'ri kiritilgan.";}
+  P={ph:ph,dn:g("f_dn").value.trim(),dp:dp,n:g("f_n").value.trim(),a:age,g:g("f_g").value,d:days,t:g("f_t").value?t:null,r:g("f_r").checked};
+  if(P.t!==null)a[1]=P.t>=38?1:P.t>=37.2?.5:0;
+  i=0;draw();
+}
+function next(){i++;draw()}
+function draw(){
+  if(i>=S.length)return result();
+  setStep(1);updateLive();
+  const s=S[i];let seg="";for(let k=0;k<S.length;k++)seg+='<i class="'+(k<i?"done":k===i?"cur":"")+'"></i>';
+  $('<div class="seg">'+seg+'</div><div class="qh"><span class="bign">'+String(i+1).padStart(2,"0")+'<small> / '+S.length+'</small></span><div class="ico">'+s[0]+'</div></div><h2 class="qt">'+s[1]+'</h2><p class="qs">'+s[2]+'</p>'+
+  '<div class="sev">'+OPTS.map(o=>'<button class="'+o[2]+(a[i]===o[1]?" sel":"")+'" onclick="pick('+o[1]+')"><b>'+o[3]+'</b><span>'+o[0]+'</span><small>'+o[4]+'</small></button>').join("")+'</div>'+
+  '<div class="nav"><button class="lnk" onclick="back()">← Orqaga</button><button class="lnk" onclick="start()">Qaytadan</button></div><p class="kb">Klaviatura: 1 · 2 · 3</p>');
+}
+function pick(v){a[i]=v;updateLive();setTimeout(next,170)}
+function back(){if(i<=0){intake();return}i--;draw()}
+document.addEventListener("keydown",e=>{if(i>=0&&i<S.length&&!/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName)){const k={"1":0,"2":.5,"3":1}[e.key];if(k!==undefined)pick(k)}});
+function score(d){
+  let num=0,den=0;
+  d.p.forEach((p,k)=>{const w=.5+p;num+=w*Math.abs(a[k]-p);den+=w});
+  let s=Math.max(0,1-num/den);
+  if(P.d>10){if(d.n.startsWith("Shamollash")||d.n==="Gripp"||d.n.startsWith("Angina"))s-=.06;if(d.n==="Bronxit"||d.n==="Sinusit")s+=.04}
+  if(P.d<=3&&d.n==="Gripp")s+=.03;
+  return Math.min(1,Math.max(0,s));
+}
+function flags(sum){
+  const f=[];
+  if(a[1]===1&&a[2]===1&&a[7]===1)f.push("Kuchli isitma, titroq va mushak og'rig'i birga — grippga xos holat.");
+  if(a[6]>=.5&&a[1]>=.5)f.push("Qusish/ich ketishi isitma bilan birga — suvsizlanish xavfi bor.");
+  if(a[6]===1&&a[3]===1)f.push("Kuchli qusish va ko'ngil aynishi — 24 soatda yaxshilanmasa shifokorga boring.");
+  if(a[1]===1&&a[5]===1&&a[4]===0)f.push("Kuchli isitma va tomoq og'rig'i yo'tal yo'q holda — bakterial angina bo'lishi mumkin.");
+  if(P.t!==null&&P.t>=39.5)f.push("Harorat juda yuqori (≥39.5°C) — tez tibbiy ko'rik zarur.");
+  if(P.d>=7&&a[1]>=.5)f.push("Isitma 7 kundan ortiq davom etmoqda — shifokor ko'rigi shart.");
+  if(P.r||P.a>=65||P.a<=2)f.push("Xavf guruhi (yosh, surunkali kasallik yoki homiladorlik) — asoratlar xavfi yuqori, shifokorga erta murojaat qiling.");
+  if(sum>=7)f.push("Ko'p alomatlar kuchli ifodalangan — o'z-o'zini davolamang.");
+  return f;
+}
+function result(){
+  const sum=a.reduce((x,y)=>x+y,0);
+  if(sum===0)return $('<div class="emoji">✅</div><h2 class="q">Alomatlar aniqlanmadi</h2><p class="hint">Siz hech qanday alomat belgilamadingiz. O\'zingizni yomon his qilsangiz, shifokorga murojaat qiling.</p><button class="btn" onclick="start()">Qaytadan boshlash</button>');
+  const r=D.map(d=>({d,s:score(d)})).sort((x,y)=>y.s-x.s);
+  const best=r[0],second=r[1],pct=Math.round(best.s*100),gap=best.s-second.s;
+  let level,col;
+  if(pct>=80&&gap>=.08){level="Yuqori moslik";col="var(--good)"}else if(pct>=65){level="O'rtacha moslik";col="var(--warn)"}else{level="Past moslik";col="var(--bad)"}
+  R={r,best,second,pct,gap,level,col,unclear:pct<65||gap<.04,f:flags(sum),sum};
+  tab="p";render();
+}
+function render(){
+  const {r,best,second,pct,level,col,unclear,f}=R;
+  setStep(2);
+  const L=157.08,off=L*(1-best.s),d=new Date(),ds=String(d.getDate()).padStart(2,"0")+"."+String(d.getMonth()+1).padStart(2,"0")+"."+d.getFullYear();
+  const arc='M10 62 A50 50 0 0 1 110 62';
+  let h='<div class="banner"><div><div class="eyebrow">Eng ehtimoliy natija</div><h2 class="bt">'+best.d.n+'</h2><span class="tag" style="background:'+col+'">'+level+'</span></div>'+
+  '<div class="gauge"><svg viewBox="0 0 120 68"><path d="'+arc+'" fill="none" style="stroke:rgba(255,255,255,.2)" stroke-width="11" stroke-linecap="round"/><path id="rc" d="'+arc+'" fill="none" style="stroke:'+col+';transition:stroke-dashoffset 1.2s ease" stroke-width="11" stroke-linecap="round" stroke-dasharray="'+L+'" stroke-dashoffset="'+L+'"/></svg><b>'+pct+'%</b></div></div>';
+  h+='<div class="tabs"><button class="'+(tab=="p"?"on":"")+'" onclick="setTab(\'p\')">👤 Bemor uchun</button><button class="'+(tab=="d"?"on":"")+'" onclick="setTab(\'d\')">👨‍⚕️ Shifokor uchun</button></div>';
+  if(tab=="p"){
+    h+='<div class="pv"><p style="margin:0 0 16px;color:var(--muted);line-height:1.6">'+best.d.d+'</p>';
+    if(unclear)h+='<div class="box"><h4>ℹ️ Natija aniq emas</h4>Alomatlaringiz bir nechta kasallikka o\'xshaydi ('+best.d.n+' va '+second.d.n+'). Aniq tashxis uchun shifokor ko\'rigi zarur.</div>';
+    f.forEach(t=>h+='<div class="box alert"><h4>⚠️ Diqqat</h4>'+t+'</div>');
+    h+='<div class="box"><h4>💡 Tavsiyalar</h4><ul>'+best.d.tips.map(t=>"<li>"+t+"</li>").join("")+'</ul></div>';
+    h+='<div class="box"><h4>👨‍⚕️ Qachon shifokorga borish kerak</h4>'+best.d.doc+'</div>';
+    h+=contactCard();h+='<div class="sec">Boshqa mos kelishlar</div>'+bars();
+    h+='<div class="sec">Sizning alomatlaringiz</div><div class="sym">'+symTags()+'</div>';
+    h+='<button class="btn" onclick="setTab(\'d\')" style="margin-top:22px">👨‍⚕️ Shifokor uchun xulosani ochish</button></div>';
+  }else{
+    h+='<div class="dv letter"><div class="lh"><b>Klinik xulosa</b><span>'+ds+' · avtomatik, dastlabki</span></div>'+doctor()+'</div>';
+  }
+  h+='<div class="btns" style="margin-top:14px"><button class="btn sec2" onclick="start()">🔄 Qaytadan</button></div>';
+  h+='<p class="disc">⚕️ Bu dastur tibbiy tashxis qo\'ymaydi va shifokor o\'rnini bosmaydi. Nafas qisilishi, ko\'krak og\'rig\'i, hushdan ketish yoki holatning keskin yomonlashuvida zudlik bilan <b>103</b> ga qo\'ng\'iroq qiling.</p>';
+  $(h);
+  updateLive();
+  requestAnimationFrame(()=>setTimeout(()=>{document.querySelectorAll(".bar i").forEach(e=>e.style.width=e.dataset.w+"%");const rc=document.getElementById("rc");if(rc)rc.style.strokeDashoffset=off},60));
+}
+function setTab(t){tab=t;render();window.scrollTo({top:0,behavior:"smooth"})}
+function bars(){return R.r.map(x=>{const p=Math.round(x.s*100);return '<div class="bar"><div class="r"><span>'+x.d.n+'</span><span>'+p+'%</span></div><div class="t"><i data-w="'+p+'"></i></div></div>'}).join("")}
+function symTags(){return a.map((v,k)=>v>0?'<span class="'+(v===1?"s2":"")+'">'+NAMES[k]+' · '+LV[v===1?2:1]+'</span>':"").join("")}
+function doctor(){
+  const {r,best,second,f}=R;
+  const ul=x=>'<ul>'+x.map(t=>"<li>"+t+"</li>").join("")+'</ul>';
+  let h='<div class="sec" style="margin-top:0">Bemor</div><div class="pt">'+
+  '<div><small>Ism</small>'+esc(P.n||"—")+'</div><div><small>Yosh / jins</small>'+P.a+' yosh, '+P.g+'</div>'+
+  '<div><small>Harorat</small>'+(P.t!==null?P.t+' °C':"o\'lchanmagan")+'</div><div><small>Davomiyligi</small>'+P.d+' kun</div>'+
+  '<div><small>Bemor telefoni</small>'+fmtPhone(P.ph)+'</div><div><small>Shifokor</small>'+(P.dn||P.dp?esc(P.dn||"")+(P.dp?" · "+fmtPhone(P.dp):""):"ko\'rsatilmagan")+'</div>'+
+  '<div style="grid-column:1/-1"><small>Xavf omillari</small>'+(P.r?"Surunkali kasallik / homiladorlik bor":"Ko\'rsatilmagan")+(P.a>=65||P.a<=2?" · yosh bo'yicha xavf guruhi":"")+'</div></div>';
+  h+='<div class="sec">Shikoyatlar (bemor ma\'lumoti bo\'yicha)</div><div class="sym">'+symTags()+'</div>';
+  const neg=a.map((v,k)=>v===0?NAMES[k]:"").filter(Boolean);
+  if(neg.length)h+='<p style="font-size:.82rem;color:var(--muted);margin:8px 0 0">Yo\'q: '+neg.join(", ")+'</p>';
+  h+='<div class="sec">Dastlabki differensial tashxis</div><table><tr><th>Tashxis</th><th>MKB-10</th><th>Moslik</th></tr>'+
+  r.slice(0,4).map((x,k)=>'<tr><td>'+(k==0?"<b>"+x.d.n+"</b>":x.d.n)+'</td><td>'+x.d.icd+'</td><td>'+Math.round(x.s*100)+'%</td></tr>').join("")+'</table>';
+  if(f.length)h+='<div class="sec">Xavf belgilari</div>'+f.map(t=>'<div class="box alert" style="margin-bottom:8px">'+t+'</div>').join("");
+  h+='<div class="sec">Ko\'rik bo\'yicha tavsiyalar — '+best.d.n+'</div><div class="box">'+ul(best.d.dr.exam)+'</div>';
+  h+='<div class="sec">Tekshiruvlar</div><div class="box">'+ul(best.d.dr.tests)+'</div>';
+  h+='<div class="sec">Yondashuv bo\'yicha mulohazalar</div><div class="box">'+ul(best.d.dr.mg)+'</div>';
+  h+='<div class="box"><h4>🔍 Differensial uchun e\'tibor ber</h4>'+second.d.n+' ('+Math.round(second.s*100)+'%) ni ham istisno qiling. '+second.d.dr.exam[0]+'.</div>';
+  h+=contactCard();h+='<div class="btns"><button class="btn" onclick="copyRep()">📋 Nusxalash</button><button class="btn sec2" onclick="try{window.print()}catch(e){toast(\'Chop etish bu yerda mavjud emas\')}">🖨️ Chop etish</button></div>';
+  h+='<p class="disc">Bu xulosa bemorning o\'zi kiritgan javoblarga asoslangan avtomatik taxmin. Yakuniy tashxis va davo — shifokorning klinik qarori.</p>';
+  return h;
+}
+function repText(){
+  const {r,best,f}=R;
+  let t="KLINIK XULOSA (avtomatik, dastlabki)\n";
+  t+="Bemor: "+(P.n||"—")+", "+P.a+" yosh, "+P.g+"\n";
+  t+="Telefon: "+fmtPhone(P.ph)+(P.dp?" | Shifokor: "+(P.dn||"")+" "+fmtPhone(P.dp):"")+"\n";
+  t+="Harorat: "+(P.t!==null?P.t+" °C":"o'lchanmagan")+" | Davomiyligi: "+P.d+" kun\n";
+  t+="Xavf omillari: "+(P.r?"bor (surunkali kasallik/homiladorlik)":"ko'rsatilmagan")+"\n\n";
+  t+="Shikoyatlar: "+(a.map((v,k)=>v>0?NAMES[k]+" ("+LV[v===1?2:1]+")":"").filter(Boolean).join(", ")||"yo'q")+"\n";
+  t+="Yo'q: "+(a.map((v,k)=>v===0?NAMES[k]:"").filter(Boolean).join(", ")||"—")+"\n\n";
+  t+="Differensial tashxis:\n"+r.slice(0,4).map((x,k)=>(k+1)+". "+x.d.n+" ("+x.d.icd+") — "+Math.round(x.s*100)+"%").join("\n")+"\n";
+  if(f.length)t+="\nXavf belgilari:\n- "+f.join("\n- ")+"\n";
+  t+="\nKo'rik:\n- "+best.d.dr.exam.join("\n- ")+"\nTekshiruvlar:\n- "+best.d.dr.tests.join("\n- ")+"\nYondashuv:\n- "+best.d.dr.mg.join("\n- ")+"\n";
+  return t;
+}
+function toast(m){const e=document.createElement("div");e.className="toast";e.textContent=m;document.body.appendChild(e);setTimeout(()=>e.remove(),2200)}
+function copyRep(){
+  const t=repText();
+  const fb=()=>{const x=document.createElement("textarea");x.value=t;document.body.appendChild(x);x.select();let ok=false;try{ok=document.execCommand("copy")}catch(e){}x.remove();toast(ok?"Nusxalandi ✓":"Nusxalash imkoni bo'lmadi")};
+  try{navigator.clipboard.writeText(t).then(()=>toast("Nusxalandi ✓"),fb)}catch(e){fb()}
+}
+function normPhone(v){let d=String(v||"").replace(/\D/g,"");if(d.length===9)d="998"+d;return d.length>=11&&d.length<=15?"+"+d:null}
+function fmtPhone(p){if(!p)return "—";const m=/^\+998(\d{2})(\d{3})(\d{2})(\d{2})$/.exec(p);return m?"+998 "+m[1]+" "+m[2]+" "+m[3]+" "+m[4]:p}
+function shortRep(){
+  const al=a.map((v,k)=>v>0?NAMES[k]+(v===1?"(kuchli)":""):"").filter(Boolean).join(", ");
+  return "Bemor: "+(P.n||"—")+", "+P.a+" yosh, "+P.g+". Tel: "+fmtPhone(P.ph)+". Harorat: "+(P.t!==null?P.t+"°C":"—")+", "+P.d+" kun. Alomatlar: "+al+". Taxminiy: "+R.best.d.n+" ("+R.pct+"%).";
+}
+function contactCard(){
+  const txt=encodeURIComponent(shortRep());
+  let h='<div class="sec">Bog\'lanish</div><div class="contact">';
+  if(P.dp){
+    h+='<div class="ch"><div class="av">👨‍⚕️</div><div><b>'+esc(P.dn||"Shifokor")+'</b><small>'+fmtPhone(P.dp)+'</small></div></div>'+
+    '<div class="acts"><a class="abtn" href="tel:'+P.dp+'" target="_blank" rel="noopener">📞 Qo\'ng\'iroq</a><a class="abtn" href="sms:'+P.dp+'?&body='+txt+'" target="_blank" rel="noopener">💬 SMS</a><a class="abtn" href="https://t.me/share/url?url=%20&text='+txt+'" target="_blank" rel="noopener">✈️ Telegram</a></div>';
+  }else{
+    h+='<div class="ch"><div class="av">👨‍⚕️</div><div><b>Shifokor raqami kiritilmagan</b><small>Xulosani yuborish uchun kiriting</small></div></div><div class="inl"><input id="c_dp" type="tel" placeholder="+998 71 123 45 67"><button onclick="setDoc()">Saqlash</button></div><div class="err" id="cerr"></div>';
+  }
+  h+='<div class="mine">📱 Sizning raqamingiz: <b>'+fmtPhone(P.ph)+'</b></div><a class="abtn sos" href="tel:103" target="_blank" rel="noopener">🚑 Tez yordam — 103</a></div>';
+  return h;
+}
+function setDoc(){const n=normPhone(document.getElementById("c_dp").value);if(!n)return document.getElementById("cerr").textContent="Raqamni to'g'ri kiriting.";P.dp=n;render()}
+document.addEventListener("focusin",e=>{const t=e.target;if(t.type==="tel"&&!t.value.trim()){t.value="+998 ";try{t.setSelectionRange(5,5)}catch(x){}}});
+document.addEventListener("input",e=>{const t=e.target;if(t.type!=="tel")return;let d=t.value.replace(/\D/g,"");if(d.startsWith("998"))d=d.slice(3);d=d.slice(0,9);const g=[d.slice(0,2),d.slice(2,5),d.slice(5,7),d.slice(7,9)].filter(Boolean);t.value="+998"+(g.length?" "+g.join(" "):" ")});
+start();
+</script>
+</body>
+</html>
